@@ -1,13 +1,10 @@
 import { Typography } from "@mui/material";
 
-export default function InventoryPage() {
+export default function AddItemPage() {
   return (
     <>
       <Typography variant="h4" gutterBottom>
-        Inventory
-      </Typography>
-      <Typography>
-        Inventory items will appear here
+        Add Item
       </Typography>
     </>
   );
