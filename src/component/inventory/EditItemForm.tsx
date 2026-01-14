@@ -8,13 +8,14 @@ import {
 } from "@mui/material";
 import { Item } from "@/lib/types";
 import { updateItem } from "@/lib/service/api";
-
+import { useSnackbar } from "notistack";  
 interface Props {
   item: Item;
 }
 
 export default function EditItemForm({ item }: Props) {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -29,9 +30,18 @@ export default function EditItemForm({ item }: Props) {
       minQuantity: Number(form.minQuantity.value),
     };
 
-    await updateItem(item.id, data);
-    router.push("/inventory");
-    router.refresh();
+    try {
+  await updateItem(item.id, data);
+  enqueueSnackbar("Item updated successfully", {
+    variant: "success",
+  });
+  router.push("/inventory");
+  router.refresh();
+} catch {
+  enqueueSnackbar("Failed to update item", {
+    variant: "error",
+  });
+}
   }
 
   return (

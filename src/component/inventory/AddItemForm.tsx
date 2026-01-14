@@ -8,10 +8,12 @@ import {
   Stack,
 } from "@mui/material";
 import { addItem } from "@/lib/service/api";
+import { useSnackbar } from "notistack";
 
 export default function AddItemForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -27,9 +29,17 @@ export default function AddItemForm() {
       minQuantity: Number(form.minQuantity.value),
     };
 
-    await addItem(data);
+   try { await addItem(data);
+      enqueueSnackbar("Item added successfully", {
+    variant: "success",
+  });
     router.push("/inventory");
-    router.refresh();
+    router.refresh();}
+    catch{
+       enqueueSnackbar("Failed to add item", {
+    variant: "error",
+  });
+    }
   }
 
   return (

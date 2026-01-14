@@ -8,6 +8,8 @@ import {
   TableRow,
   Chip,
 } from "@mui/material";
+import { useState } from "react";
+import ConfirmDialog from "@/component/ui/ConfirmDialog";
 import { Item } from "@/lib/types";
 import Link from "next/link";
 import { IconButton } from "@mui/material";
@@ -15,17 +17,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { deleteItem } from "@/lib/service/api";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 interface Props {
   items: Item[];
 }
 
 export default function ItemTable({ items }: Props) {
   const router = useRouter();
-
-  async function handleDelete(id: string) {
-    await deleteItem(id);
-    router.refresh();
-  }
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   return (
     <Table>
@@ -70,10 +70,35 @@ export default function ItemTable({ items }: Props) {
 
                 <IconButton
                   color="error"
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => setSelectedId(item.id)}
                 >
                   <DeleteIcon />
+
                 </IconButton>
+                <ConfirmDialog
+                  open={Boolean(selectedId)}
+                  title="Delete Item"
+                  description="Are you sure you want to delete this item?"
+                  onClose={() => setSelectedId(null)}
+                  onConfirm={async () => {
+                    if (selectedId) {
+                      try {
+                        await deleteItem(selectedId);
+                        enqueueSnackbar("Item deleted", {
+                          variant: "success",
+                        });
+                        setSelectedId(null);
+                        router.refresh();
+                      } catch {
+                        enqueueSnackbar("Failed to delete item", {
+                          variant: "error",
+                        });
+                      }
+                    }
+                  }}
+
+                />
+
               </TableCell>
 
             </TableRow>
@@ -81,5 +106,7 @@ export default function ItemTable({ items }: Props) {
         })}
       </TableBody>
     </Table>
+
   );
+
 }
