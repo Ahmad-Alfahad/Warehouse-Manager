@@ -1,39 +1,85 @@
-import { Item } from "@/lib/types";
+"use client";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Chip,
+} from "@mui/material";
+import { Item } from "@/lib/types";
+import Link from "next/link";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { deleteItem } from "@/lib/service/api";
+import { useRouter } from "next/navigation";
 interface Props {
   items: Item[];
 }
 
 export default function ItemTable({ items }: Props) {
+  const router = useRouter();
+
+  async function handleDelete(id: string) {
+    await deleteItem(id);
+    router.refresh();
+  }
+
   return (
-    <table className="w-full border text-sm">
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="border p-2 text-left">Name</th>
-          <th className="border p-2 text-left">Category</th>
-          <th className="border p-2 text-left">Quantity</th>
-          <th className="border p-2 text-left">Location</th>
-          <th className="border p-2 text-left">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>Category</TableCell>
+          <TableCell>Quantity</TableCell>
+          <TableCell>Location</TableCell>
+          <TableCell>Status</TableCell>
+        </TableRow>
+      </TableHead>
+
+      <TableBody>
         {items.map((item) => {
-       
+          const lowStock =
+            item.minQuantity !== undefined &&
+            item.quantity < item.minQuantity;
+
           return (
-            <tr key={item.id} className={ "bg-red-50" }>
-              <td className="border p-2">{item.name}</td>
-              <td className="border p-2">{item.category}</td>
-              <td className="border p-2">
-                {item.quantity} {item.quantity}
-              </td>
-              <td className="border p-2">{item.name}</td>
-              <td className="border p-2">
-                <span className="text-gray-400">Edit | Delete</span>
-              </td>
-            </tr>
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.category}</TableCell>
+              <TableCell>
+                {item.quantity} {item.unit}
+              </TableCell>
+              <TableCell>{item.location}</TableCell>
+              <TableCell>
+                {lowStock ? (
+                  <Chip label="Low" color="error" size="small" />
+                ) : (
+                  <Chip label="OK" color="success" size="small" />
+                )}
+              </TableCell>
+              <TableCell>
+                <IconButton
+                  component={Link}
+                  href={`/inventory/${item.id}/edit`}
+                >
+                  <EditIcon />
+                </IconButton>
+
+                <IconButton
+                  color="error"
+                  onClick={() => handleDelete(item.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+
+            </TableRow>
           );
         })}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

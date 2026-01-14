@@ -34,6 +34,10 @@ export default function InventoryLayout({
           <ListItemButton component={Link} href="/about">
             <ListItemText primary="About" />
           </ListItemButton>
+          
+          {/* <ListItemButton component={Link} href="/inventory/edit">
+            <ListItemText primary="edit" />
+          </ListItemButton> */}
         </List>
       </Drawer>
 
