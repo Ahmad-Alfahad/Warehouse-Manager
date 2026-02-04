@@ -5,10 +5,12 @@ import {
   TextField,
   Button,
   Stack,
+  Box
 } from "@mui/material";
 import { Item } from "@/lib/types";
 import { updateItem } from "@/lib/service/api";
 import { useSnackbar } from "notistack";  
+import { Margin } from "@mui/icons-material";
 interface Props {
   item: Item;
 }
@@ -45,6 +47,7 @@ export default function EditItemForm({ item }: Props) {
   }
 
   return (
+    <Box ml={5} mt={3}>
     <form onSubmit={handleSubmit}>
       <Stack spacing={2} maxWidth={400}>
         <TextField name="name" label="Name" defaultValue={item.name} />
@@ -77,5 +80,6 @@ export default function EditItemForm({ item }: Props) {
         </Button>
       </Stack>
     </form>
+    </Box>
   );
 }

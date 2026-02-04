@@ -53,18 +53,7 @@ export default function DashboardStats({
         </Card>
       </Grid>
 
-      <Grid item xs={12} sm={4}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6">
-              Categories
-            </Typography>
-            <Typography variant="h4">
-              {categories}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
+    
     </Grid>
   );
 }

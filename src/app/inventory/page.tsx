@@ -1,9 +1,8 @@
-import ItemTable from "@/component/inventory/ItemTable";
 import SearchableTable from "@/component/inventory/SearchableTable";
 import DashboardStats from "@/component/inventory/DashboardStats";
 import EmptyState from "@/component/ui/EmptyState";
 import { getItems } from "@/lib/service/api";
-import { Typography } from "@mui/material";
+import { Typography , Box} from "@mui/material";
 
 export default async function InventoryPage() {
    const items = await getItems();
@@ -11,14 +10,16 @@ export default async function InventoryPage() {
    return <EmptyState/>;
   }
    return (
-    <>
+    <Box display={'flex'} flexDirection={'column'} maxWidth={'100vw'} ml={5} mt={5}>
       <Typography variant="h4" gutterBottom>
         Inventory
       </Typography>
       
         <DashboardStats items={items} />
+        
         <SearchableTable items={items} />
-        <ItemTable items={items} /> 
-    </>
+        
+
+    </Box>
   );
 }

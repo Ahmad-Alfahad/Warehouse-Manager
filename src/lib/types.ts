@@ -6,4 +6,5 @@ export interface Item {
   unit: string;
   location: string;
   minQuantity?: number;
+  price : number ;
 }

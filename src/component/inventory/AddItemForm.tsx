@@ -6,6 +6,7 @@ import {
   TextField,
   Button,
   Stack,
+  Box,
 } from "@mui/material";
 import { addItem } from "@/lib/service/api";
 import { useSnackbar } from "notistack";
@@ -29,41 +30,45 @@ export default function AddItemForm() {
       minQuantity: Number(form.minQuantity.value),
     };
 
-   try { await addItem(data);
+    try {
+      await addItem(data);
       enqueueSnackbar("Item added successfully", {
-    variant: "success",
-  });
-    router.push("/inventory");
-    router.refresh();}
-    catch{
-       enqueueSnackbar("Failed to add item", {
-    variant: "error",
-  });
+        variant: "success",
+      });
+      router.push("/inventory");
+      router.refresh();
+    }
+    catch {
+      enqueueSnackbar("Failed to add item", {
+        variant: "error",
+      });
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={2} maxWidth={400}>
-        <TextField name="name" label="Name" required />
-        <TextField name="category" label="Category" required />
-        <TextField name="quantity" label="Quantity" type="number" required />
-        <TextField name="unit" label="Unit" required />
-        <TextField name="location" label="Location" required />
-        <TextField
-          name="minQuantity"
-          label="Minimum Quantity"
-          type="number"
-        />
+    <Box ml={5}>
+      <form onSubmit={handleSubmit} >
+        <Stack spacing={1} maxWidth={600} minWidth={300} >
+          <TextField name="name" label="Name" required />
+          <TextField name="category" label="Category" required />
+          <TextField name="quantity" label="Quantity" type="number" required />
+          <TextField name="unit" label="Unit" required />
+          <TextField name="location" label="Location" required />
+          <TextField
+            name="minQuantity"
+            label="Minimum Quantity"
+            type="number"
+          />
 
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={loading}
-        >
-          Add Item
-        </Button>
-      </Stack>
-    </form>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={loading}
+          >
+            Add Item
+          </Button>
+        </Stack>
+      </form>
+    </Box>
   );
 }

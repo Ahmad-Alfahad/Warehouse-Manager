@@ -2,17 +2,17 @@
 
 import {
   TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
+  // Select,
+  // MenuItem,
+  // FormControl,
+  // InputLabel,
   Switch,
   FormControlLabel,
   Stack,
 } from "@mui/material";
 
 import { useState } from "react";
-import ItemTable from "./ItemTable";
+import ItemCard from "./ItemCard";
 import { Item } from "@/lib/types";
 
 export default function SearchableTable({
@@ -22,7 +22,7 @@ export default function SearchableTable({
 }) {
 
   const [query, setQuery] = useState("");
-  const [category , setCategory]  = useState("all");
+  // const [category , setCategory]  = useState("all");
   const [lowStockOnly , setLowStockOnly] = useState(false)
 
 
@@ -31,21 +31,21 @@ export default function SearchableTable({
     .toLowerCase()
     .includes(query.toLowerCase());
 
-  const matchesCategory =
-    category === "all" || item.category === category;
+  // const matchesCategory =
+  //   category === "all" || item.category === category;
 
   const matchesLowStock =
     !lowStockOnly ||
     (item.minQuantity !== undefined &&
       item.quantity < item.minQuantity);
 
-  return matchesSearch && matchesCategory && matchesLowStock;
+  return matchesSearch && matchesLowStock;
 });
 
 
-  const categories = Array.from(
-  new Set(items.map((item) => item.category))
-);
+//   const categories = Array.from(
+//   new Set(items.map((item) => item.category))
+// );
 
   return (
     <>
@@ -55,22 +55,6 @@ export default function SearchableTable({
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
-
-    <FormControl sx={{ minWidth: 160 }}>
-      <InputLabel>Category</InputLabel>
-      <Select
-        value={category}
-        label="Category"
-        onChange={(e) => setCategory(e.target.value)}
-      >
-        <MenuItem value="all">All</MenuItem>
-        {categories.map((cat) => (
-          <MenuItem key={cat} value={cat}>
-            {cat}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
 
     <FormControlLabel
       control={
@@ -84,8 +68,8 @@ export default function SearchableTable({
       label="Low Stock"
     />
   </Stack>
-
-  <ItemTable items={filtered} />
+    
+   { <ItemCard items={filtered} />}
 </>
 
   );
