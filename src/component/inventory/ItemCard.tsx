@@ -1,7 +1,7 @@
 "use client";
 
 import {
-    Grid,
+   
     Card,
     CardContent,
     Typography,
@@ -16,7 +16,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CategoryIcon from "@mui/icons-material/Category";
-
 import { useState } from "react";
 import { Item } from "@/lib/types";
 import Link from "next/link";
@@ -29,7 +28,7 @@ interface Props {
     items: Item[];
 }
 
-export default function ItemCardGrid({ items }: Props) {
+export default function ItemCard({ items }: Props) {
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -101,8 +100,24 @@ export default function ItemCardGrid({ items }: Props) {
                                                 </strong>
                                             </Typography>
                                         </Box>
-
-                                        {/* Status */}
+                                        <Box mt={2}>
+                                            <Typography variant="body2">
+                                                Price:
+                                                <strong style={{ marginLeft: 6 }}>
+                                                    ${item.price.toFixed(2)}
+                                                </strong>
+                                            </Typography>
+                                        </Box>
+                                        <Box mt={2}>
+                                            <Typography variant="body2">
+                                                minQuantity:
+                                                <strong style={{ marginLeft: 6 }}>
+                                                    {item.minQuantity}
+                                                </strong>
+                                            </Typography>
+                                        </Box>
+                                             
+                                       
                                         <Box mt={1}>
                                             {lowStock ? (
                                                 <Chip label="Low stock" color="error" size="small" />

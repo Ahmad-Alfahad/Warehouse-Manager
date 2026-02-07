@@ -6,12 +6,18 @@ interface Props {
   params: { id: string };
 }
 
-export default async function EditItemPage({ params }: Props) {
+export default async function EditItemPage(props: Props) {
+  const params = await props.params;
   const item = await getItem(params.id);
 
-  return (
+  console.log("Fetched item in EditItemPage:", item);
+  if (!item || item === "Not found") {
+    return <div>Item not found</div>;
+  }
+
+   return (
     <>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom ml={3}>
         Edit Item
       </Typography>
 

@@ -2,10 +2,6 @@
 
 import {
   TextField,
-  // Select,
-  // MenuItem,
-  // FormControl,
-  // InputLabel,
   Switch,
   FormControlLabel,
   Stack,

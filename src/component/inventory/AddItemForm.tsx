@@ -25,7 +25,7 @@ export default function AddItemForm() {
       name: form.name.value,
       category: form.category.value,
       quantity: Number(form.quantity.value),
-      unit: form.unit.value,
+      price: Number(form.price.value),
       location: form.location.value,
       minQuantity: Number(form.minQuantity.value),
     };
@@ -48,11 +48,11 @@ export default function AddItemForm() {
   return (
     <Box ml={5}>
       <form onSubmit={handleSubmit} >
-        <Stack spacing={1} maxWidth={600} minWidth={300} >
-          <TextField name="name" label="Name" required />
+        <Stack spacing={2} maxWidth={400} >
+          <TextField name="name" label="Name" required  />
           <TextField name="category" label="Category" required />
           <TextField name="quantity" label="Quantity" type="number" required />
-          <TextField name="unit" label="Unit" required />
+          <TextField name="price" label="Price" type="number" required />
           <TextField name="location" label="Location" required />
           <TextField
             name="minQuantity"

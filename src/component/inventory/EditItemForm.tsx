@@ -10,69 +10,75 @@ import {
 import { Item } from "@/lib/types";
 import { updateItem } from "@/lib/service/api";
 import { useSnackbar } from "notistack";  
-import { Margin } from "@mui/icons-material";
+import { useState } from "react";
 interface Props {
   item: Item;
 }
-
+ 
 export default function EditItemForm({ item }: Props) {
+  // console.log("Received item in EditItemForm:", item);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [formData, setFormData] = useState<Omit<Item, "id">>({
+    name: item.name ?? "",
+    category: item.category ?? "",
+    quantity: item.quantity ?? 0,
+    location: item.location ?? "",
+    minQuantity: item.minQuantity ?? 0,
+    price: item.price ?? 0,
+  });
 
-  async function handleSubmit(e: React.FormEvent) {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-
-    const data = {
-      name: form.name.value,
-      category: form.category.value,
-      quantity: Number(form.quantity.value),
-      unit: form.unit.value,
-      location: form.location.value,
-      minQuantity: Number(form.minQuantity.value),
-    };
-
     try {
-  await updateItem(item.id, data);
-  enqueueSnackbar("Item updated successfully", {
-    variant: "success",
-  });
-  router.push("/inventory");
-  router.refresh();
-} catch {
-  enqueueSnackbar("Failed to update item", {
-    variant: "error",
-  });
-}
-  }
+      await updateItem(item.id, formData); 
+      enqueueSnackbar("Item updated successfully", { variant: "success" });
+      router.push("/inventory");
+      router.refresh();
+    } catch {
+      enqueueSnackbar("Failed to update item", { variant: "error" });
+    }
+  };
+
+
 
   return (
     <Box ml={5} mt={3}>
     <form onSubmit={handleSubmit}>
       <Stack spacing={2} maxWidth={400}>
-        <TextField name="name" label="Name" defaultValue={item.name} />
+        <TextField name="name" label="Name" defaultValue={item.name} onChange={handleChange} />
         <TextField
           name="category"
           label="Category"
           defaultValue={item.category}
+          onChange={handleChange}
         />
         <TextField
           name="quantity"
           label="Quantity"
           type="number"
           defaultValue={item.quantity}
+          onChange={handleChange}
         />
-        <TextField name="unit" label="Unit" defaultValue={item.unit} />
+        <TextField name="price" label="price" defaultValue={item.price} onChange={handleChange} />
         <TextField
           name="location"
           label="Location"
           defaultValue={item.location}
+          onChange={handleChange}
         />
         <TextField
           name="minQuantity"
           label="Minimum Quantity"
           type="number"
           defaultValue={item.minQuantity}
+          onChange={handleChange}
         />
 
         <Button type="submit" variant="contained">

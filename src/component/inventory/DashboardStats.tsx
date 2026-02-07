@@ -21,13 +21,10 @@ export default function DashboardStats({
       item.quantity < item.minQuantity
   ).length;
 
-  const categories = new Set(
-    items.map((item) => item.category)
-  ).size;
 
   return (
     <Grid container spacing={2} mb={3}>
-      <Grid item xs={12} sm={4}>
+      <Grid   size={{ xs: 12, sm: 4 }}>
         <Card>
           <CardContent>
             <Typography variant="h6">
@@ -40,7 +37,7 @@ export default function DashboardStats({
         </Card>
       </Grid>
 
-      <Grid item xs={12} sm={4}>
+      <Grid   size={{ xs: 12, sm: 4 }}>
         <Card>
           <CardContent>
             <Typography variant="h6">

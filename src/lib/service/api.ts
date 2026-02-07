@@ -23,12 +23,14 @@ export async function addItem(data: Omit<Item, "id">) {
   return res.json();
 }
 
-export async function getItem(id : string): Promise<Item> {
-  const res = await fetch(`${API_URL}/items/${id}` ,
-    {
-      cache: "no-store",
-    }
-  );
+export async function getItem(id: string) {
+ 
+  const res = await fetch(`${API_URL}/items/${id}`, { cache: "no-store" });
+  // console.log("error detection id : " , id);
+  if (!res.ok) {
+    console.error("Failed to fetch item:", id, res.status);
+    return null; 
+  }
   return res.json();
 }
 

@@ -30,6 +30,7 @@ export default function DashboardCard({
       href={link}
       sx={{
         height: 150,
+        width: 200,
         textDecoration: "none",
         borderRadius: 3,
         boxShadow: 3,

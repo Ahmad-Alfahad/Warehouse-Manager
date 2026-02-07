@@ -3,7 +3,6 @@ export interface Item {
   name: string;
   category: string;
   quantity: number;
-  unit: string;
   location: string;
   minQuantity?: number;
   price : number ;

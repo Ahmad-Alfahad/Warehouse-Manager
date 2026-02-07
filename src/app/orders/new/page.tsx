@@ -7,13 +7,10 @@ export default function NewOrderPage() {
   return (
     
     <Container maxWidth="md">
-      <Typography variant="h4" gutterBottom>
-        Create Order
-      </Typography>
-
-      <Paper sx={{ p: 3 }}>
+      
+      
         <OrderForm />
-      </Paper>
+      
     </Container>
   );
   

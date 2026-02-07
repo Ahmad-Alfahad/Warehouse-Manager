@@ -13,13 +13,14 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const navItems = [
   { label: "Dashboard", href: "/", icon: <DashboardIcon /> },
   { label: "Products", href: "/inventory", icon: <InventoryIcon /> },
   { label: "Add Product", href: "/inventory/add", icon: <AddBoxIcon /> },
   { label: "Orders", href: "/orders", icon: <ShoppingCartIcon /> },
-  { label: "Orders", href: "/orders/new", icon: <ShoppingCartIcon /> },
+  { label: "New Order", href: "/orders/new", icon: <AddShoppingCartIcon /> },
 ];
 
 export default function Sidebar() {
