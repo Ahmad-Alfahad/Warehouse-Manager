@@ -36,7 +36,7 @@ export default function ItemCard({ items }: Props) {
 
     return (
         <>
-            <Box display={"flex"} flexDirection={'row'} gap={3} mb={5} mr={4} flexWrap={'wrap'} justifyContent={"flex-start"} >
+            <Box display={"flex"} flexDirection={'row'} gap={3} mb={5} mr={2} flexWrap={'wrap'} justifyContent={"flex-start"} >
                 {items.map((item) => {
                     const lowStock =
                         item.minQuantity !== undefined &&
@@ -105,7 +105,7 @@ export default function ItemCard({ items }: Props) {
                                             <Typography variant="body2">
                                                 Price:
                                                 <strong style={{ marginLeft: 6 }}>
-                                                    ${item.price.toFixed(2)}
+                                                    ${item.price}
                                                 </strong>
                                             </Typography>
                                         </Box>
