@@ -7,7 +7,7 @@ export const theme = createTheme({
       main: "#6163c7", // Indigo
     },
     background: {
-      default: "#183c6bec",
+      default: "#183d6eec",
       paper: "#222d44",
     },
   },

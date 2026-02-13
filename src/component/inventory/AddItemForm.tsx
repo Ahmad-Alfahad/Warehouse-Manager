@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { addItem } from "@/lib/service/api";
 import { useSnackbar } from "notistack";
-
+import { addEvent } from "@/lib/service/storage";
 export default function AddItemForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function AddItemForm() {
 
     const form = e.target as HTMLFormElement;
     const data = {
-      name: form.name.value,
+      name: (form.elements.namedItem("name") as HTMLInputElement)?.value,
       category: form.category.value,
       quantity: Number(form.quantity.value),
       price: Number(form.price.value),
@@ -32,6 +32,7 @@ export default function AddItemForm() {
 
     try {
       await addItem(data);
+      addEvent({ type:`add`, message : `new item added ${data.name}` });
       enqueueSnackbar("Item added successfully", {
         variant: "success",
       });
@@ -53,7 +54,7 @@ export default function AddItemForm() {
           <TextField name="category" label="Category" required />
           <TextField name="quantity" label="Quantity" type="number" required />
           <TextField name="price" label="Price" type="number" required />
-          <TextField name="location" label="Location" required />
+          <TextField name="location" label="Location"  />
           <TextField
             name="minQuantity"
             label="Minimum Quantity"

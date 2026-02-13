@@ -11,6 +11,7 @@ import { Item } from "@/lib/types";
 import { updateItem } from "@/lib/service/api";
 import { useSnackbar } from "notistack";  
 import { useState } from "react";
+import { addEvent } from "@/lib/service/storage";
 interface Props {
   item: Item;
 }
@@ -38,6 +39,7 @@ export default function EditItemForm({ item }: Props) {
     e.preventDefault();
     try {
       await updateItem(item.id, formData); 
+      addEvent({ type: 'updateItem', message: `item updated ${formData.name} ` });
       enqueueSnackbar("Item updated successfully", { variant: "success" });
       router.push("/inventory");
       router.refresh();

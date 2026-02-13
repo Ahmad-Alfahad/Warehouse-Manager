@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getItems, updateItem } from "@/lib/service/api";
+import { getItems } from "@/lib/service/api";
 import { Item } from "@/lib/types";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -17,11 +17,18 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Divider,
-  Stack,
-} from "@mui/material";
+  Divider,} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { addEvent } from "@/lib/service/storage";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel
+} from "@mui/material";
+
 
 
 type OrderItem = {
@@ -38,6 +45,7 @@ export default function OrderForm() {
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [orderType , setOrderType] = useState('in');
   const [snackbar, setSnackbar] = useState<{
   open: boolean;
   message: string;
@@ -54,7 +62,7 @@ export default function OrderForm() {
 
  function removeFromOrder(id: string) {
   setOrder(prev => prev.filter(item => item.id !== id));
-  showSnackbar("🗑️ تم حذف العنصر من الطلب", "info");
+  showSnackbar("🗑️ Item deleted successfully", "info");
 }
 
 function showSnackbar(
@@ -70,11 +78,13 @@ function showSnackbar(
 
   function addToOrder() {
     if (!selectedItem) return;
-
+    if(orderType==='out'){
+     
+    
     if (quantity > selectedItem.quantity) {
-      setError(`❌ الكمية غير كافية (${selectedItem.quantity})`);
+      setError(`Quantity not Enough (${selectedItem.quantity})`);
       return;
-    }
+    } }
 
     setError("");
 
@@ -98,7 +108,7 @@ function showSnackbar(
         },
       ];
     });
-    showSnackbar("✅ تم إضافة العنصر إلى الطلب", "success");
+    showSnackbar("✅ Item added to order successfully", "success");
 
     setQuantity(1);
     setSelectedId("");
@@ -109,28 +119,22 @@ function showSnackbar(
 
     for (const item of order) {
       if (item.requestedQty > item.availableQty) {
-        setError("❌ أحد العناصر لم يعد متوفرًا");
+        setError("Quantity not Enough for item: " + item.name);
         setLoading(false);
         return;
       }
-      showSnackbar("📦 تم تأكيد الطلب وخصم الكميات", "success");
+      addEvent({ type: 'confirmOrder', message : `${orderType} order confirmed for item ${item.name} with quantity ${item.requestedQty}` })
+      showSnackbar("📦 Order confirmed and quantities deducted", "success");
 
     }
 
-    for (const item of order) {
-      await updateItem(item.id, {
-        name: item.name,
-        quantity: item.availableQty - item.requestedQty,
-        price: items.find(i => i.id === item.id)?.price ?? 0,
-      });
-    }
-
+  
     // تحديث الواجهة
     setItems(prev =>
       prev.map(i => {
         const ordered = order.find(o => o.id === i.id);
         return ordered
-          ? { ...i, quantity: i.quantity - ordered.requestedQty }
+          ? { ...i, quantity: orderType === 'in' ? i.quantity + ordered.requestedQty : i.quantity - ordered.requestedQty  }
           : i;
       })
     );
@@ -139,12 +143,32 @@ function showSnackbar(
     setLoading(false);
   }
 return (
-  <Card sx={{ maxWidth: 520, mx: "auto", mt: 5  }}>
+  <Card sx={{ maxWidth: 520, mx: "auto", mt: 5  , backgroundColor: "background.paper", borderRadius: 3 }}>
     <CardContent>
       <Typography variant="h5" mb={3}>
-        🛒 Create Order
+        🛒  Order
       </Typography>
+      <FormControl>
+  {/* <FormLabel>نوع العملية</FormLabel> */}
+  <RadioGroup
+     row
 
+    value={orderType}
+    onChange={(e) => setOrderType(e.target.value)}
+  >
+    <FormControlLabel
+      value="in"
+      control={<Radio />}
+      label="To Inventory"
+    />
+    <FormControlLabel
+      value="out"
+      control={<Radio />}
+      label="From Inventory"
+    />
+  </RadioGroup>
+</FormControl>
+      
       {/* Select Item */}
       <TextField
         select
@@ -252,7 +276,7 @@ return (
       onClose={() =>
         setSnackbar(prev => ({ ...prev, open: false }))
       }
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
     >
       <Alert
         onClose={() =>

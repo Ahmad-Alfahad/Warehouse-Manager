@@ -23,7 +23,7 @@ export default function RootLayout({
             autoHideDuration={3000}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
           >
-            <Box display="flex" flexDirection={'row'} minHeight="100vh"  width={'100vw'}>
+            <Box display="flex" flexDirection={'row'} minHeight="100vh"  >
                <Sidebar />
                 <Box  width={'100vw'}>
                   {children}

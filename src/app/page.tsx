@@ -1,21 +1,23 @@
 import DashboardCard from "@/component/DashboardCard";
-import {Typography , Box } from "@mui/material";
-import{ Grid }from "@mui/material";
+import {  Box } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-
+import LastProcesses from "@/component/LastProcesses";
 export default function Dashboard() {
+    
+    //  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   return (
 
-   <Box maxWidth={'100vw'}  ml={10} mt={5} mr={6}>
-     <Typography variant="h5" mb={3} >
-         Dashboard
-      </Typography>
+   <Box display={'flex'} mt={8} flexDirection={'column'}  justifyContent={'space-around'} maxWidth={'100vw'} gap={5}  >
+  
 
-    <Grid container spacing={3}  alignItems="stretch">
-  <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Box  >
+ 
+    <Box display={'flex'} flexDirection={'row'}  flexWrap={'wrap'} justifyContent={'space-around'} gap={2}  >
+
+    <Box  >
     <DashboardCard
       title="Products"
       value="View & Manage"
@@ -23,9 +25,9 @@ export default function Dashboard() {
       icon={<InventoryIcon />}
       color="#2563eb"
     />
-  </Grid>
+  </Box>
 
-  <Grid item xs={12} sm={6} md={4} lg={3}>
+  <Box >
     <DashboardCard
       title="Add Product"
       value="New Item"
@@ -33,9 +35,9 @@ export default function Dashboard() {
       icon={<AddBoxIcon />}
       color="#16a34a"
     />
-  </Grid>
+  </Box>
 
-  <Grid item xs={12} sm={6} md={4} lg={3}>
+  <Box >
     <DashboardCard
       title="Orders"
       value="Show Orders"
@@ -43,9 +45,9 @@ export default function Dashboard() {
       icon={<ReceiptLongIcon />}
       color="#7c3aed"
     />
-  </Grid>
+  </Box>
 
-  <Grid item xs={12} sm={6} md={4} lg={3}>
+  <Box >
     <DashboardCard
       title="New Order"
       value="Create Order"
@@ -53,8 +55,23 @@ export default function Dashboard() {
       icon={<ShoppingCartCheckoutIcon />}
       color="#dc2626"
     />
-  </Grid>
-</Grid>
+  </Box>
+</Box>
+</Box>
+
+ <Box >
+
+ <Box sx={{ "&:hover": {
+          transform: "translateY(-6px)",
+          transition:'0.3s',
+        },
+        marginLeft:'15px' ,
+        marginRight:'15px' ,
+        textAlign:'center',
+       height: '340px' ,
+       alignContent:'center'
+        }}><LastProcesses></LastProcesses> </Box>
+ </Box>
 
    </Box>
 

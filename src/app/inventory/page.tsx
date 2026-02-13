@@ -1,8 +1,8 @@
-import SearchableTable from "@/component/inventory/SearchableTable";
 import DashboardStats from "@/component/inventory/DashboardStats";
 import EmptyState from "@/component/ui/EmptyState";
 import { getItems } from "@/lib/service/api";
 import { Typography , Box} from "@mui/material";
+import ItemsTable from "@/component/inventory/ItemsTable";
 
 export default async function InventoryPage() {
    const items = await getItems();
@@ -17,7 +17,7 @@ export default async function InventoryPage() {
       
         <DashboardStats items={items} />
         
-        <SearchableTable items={items} />
+        <ItemsTable items={items} />
         
 
     </Box>

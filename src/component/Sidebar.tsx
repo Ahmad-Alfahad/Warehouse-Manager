@@ -8,12 +8,16 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
+  Tooltip,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 const navItems = [
   { label: "Dashboard", href: "/", icon: <DashboardIcon /> },
@@ -25,35 +29,70 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <div >
-      <Box width={240} bgcolor="background.paper" 
-      p={2} display={'flex'} flexDirection={'column'}
-       height={'100vh'} position={'sticky'} top={0}
+    <Box
+      sx={{
+        width: isSmall ? 80 : 250,
+        transition: "width 0.3s ease",
+        bgcolor: "background.paper",
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+      }}
+    >
+      {/* Logo */}
+      <Box
+        sx={{
+          fontSize: 20,
+          fontWeight: "bold",
+          mb: 3,
+          textAlign: isSmall ? "center" : "left",
+        }}
       >
-        <Box fontSize={20} fontWeight="bold" mb={3} >
-          📦 Inventory
-        </Box>
+        {isSmall ? "📦" : "📦 Inventory"}
+      </Box>
 
-        <List>
-          {navItems.map(item => (
+      <List>
+        {navItems.map((item) => (
+          <Tooltip
+            key={item.href}
+            title={isSmall ? item.label : ""}
+            placement="right"
+          >
             <ListItemButton
-              key={item.href}
               component={Link}
               href={item.href}
               selected={pathname === item.href}
               sx={{
                 borderRadius: 2,
                 mb: 1,
+                justifyContent: isSmall ? "center" : "flex-start",
+                px: isSmall ? 1 : 2,
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: isSmall ? 0 : 2,
+                  justifyContent: "center",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              {!isSmall && (
+                <ListItemText primary={item.label} />
+              )}
             </ListItemButton>
-          ))}
-        </List>
-      </Box>
-    </div>
+          </Tooltip>
+        ))}
+      </List>
+    </Box>
   );
 }

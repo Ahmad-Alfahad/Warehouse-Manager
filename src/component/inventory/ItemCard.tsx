@@ -23,6 +23,7 @@ import { deleteItem } from "@/lib/service/api";
 import ConfirmDialog from "@/component/ui/ConfirmDialog";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { addEvent } from "@/lib/service/storage";
 
 interface Props {
     items: Item[];
@@ -163,6 +164,7 @@ export default function ItemCard({ items }: Props) {
 
                     try {
                         await deleteItem(selectedId);
+                        addEvent({type : 'deleteItem' , message : `item ${items.find(item => item.id === selectedId)?.name || 'Unknown'} deleted with id ${selectedId}`})
                         enqueueSnackbar("Item deleted successfully", {
                             variant: "success",
                         });

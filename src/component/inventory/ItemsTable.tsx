@@ -6,12 +6,11 @@ import {
   FormControlLabel,
   Stack,
 } from "@mui/material";
-
-import { useState } from "react";
+import {  useState } from "react";
 import ItemCard from "./ItemCard";
 import { Item } from "@/lib/types";
 
-export default function SearchableTable({
+export default function ItemsTable({
   items,
 }: {
   items: Item[];
@@ -20,8 +19,7 @@ export default function SearchableTable({
   const [query, setQuery] = useState("");
   // const [category , setCategory]  = useState("all");
   const [lowStockOnly , setLowStockOnly] = useState(false)
-
-
+ 
  const filtered = items.filter((item) => {
   const matchesSearch = item.name
     .toLowerCase()

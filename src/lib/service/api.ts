@@ -1,5 +1,6 @@
 import { Item } from "../types";
 const API_URL = "https://6962be22d9d64c7619089dfc.mockapi.io";
+ 
 export async function getItems(): Promise<Item[]> {
   const res = await fetch(`${API_URL}/items`, { cache: "no-store" });
 
@@ -9,7 +10,8 @@ export async function getItems(): Promise<Item[]> {
   return res.json();
 }
 
-export async function addItem(data: Omit<Item, "id">) {
+
+export async function addItem(  data: Omit<Item, "id">) {
   const res = await fetch(`${API_URL}/items`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
