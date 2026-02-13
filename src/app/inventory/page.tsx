@@ -10,7 +10,7 @@ export default async function InventoryPage() {
    return <EmptyState/>;
   }
    return (
-    <Box display={'flex'} flexDirection={'column'} maxWidth={'100vw'} ml={5} mt={5}>
+    <Box display={'flex'} flexDirection={'column'} maxWidth={'80vw'} ml={2}>
       <Typography variant="h4" gutterBottom>
         Inventory
       </Typography>

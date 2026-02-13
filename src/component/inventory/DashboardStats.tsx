@@ -24,7 +24,7 @@ export default function DashboardStats({
 
   return (
     <Grid container spacing={2} mb={3}>
-      <Grid   size={{ xs: 12, sm: 4 }}>
+      <Grid   size={{ xs: 12, sm: 3 }}>
         <Card>
           <CardContent>
             <Typography variant="h6">
@@ -37,7 +37,7 @@ export default function DashboardStats({
         </Card>
       </Grid>
 
-      <Grid   size={{ xs: 12, sm: 4 }}>
+      <Grid   size={{ xs: 12, sm: 3}}>
         <Card>
           <CardContent>
             <Typography variant="h6">
