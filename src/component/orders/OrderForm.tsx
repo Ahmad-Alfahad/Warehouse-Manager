@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getItems } from "@/lib/service/api";
+import { getItems, updateItem } from "@/lib/service/api";
 import { Item } from "@/lib/types";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -26,10 +26,8 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  FormLabel
+
 } from "@mui/material";
-
-
 
 type OrderItem = {
   id: string;
@@ -37,10 +35,13 @@ type OrderItem = {
   requestedQty: number;
   availableQty: number;
 };
+interface Props {
+  item: Item[];
+}
 
-export default function OrderForm() {
-  const [items, setItems] = useState<Item[]>([]);
-  const [order, setOrder] = useState<OrderItem[]>([]);
+export default function OrderForm( {item} : Props) {
+  const [itemsState, setItemsState] = useState<Item[]>(item);
+  const [order, setOrder] = useState<OrderItem[]>();
   const [selectedId, setSelectedId] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState("");
@@ -57,11 +58,11 @@ export default function OrderForm() {
 });
 
   useEffect(() => {
-    getItems().then(setItems);
+    getItems().then(setItemsState);
   }, []);
 
  function removeFromOrder(id: string) {
-  setOrder(prev => prev.filter(item => item.id !== id));
+  setOrder(prev => prev?.filter(item => item.id !== id) || []);
   showSnackbar("🗑️ Item deleted successfully", "info");
 }
 
@@ -74,7 +75,7 @@ function showSnackbar(
 
 
 
-  const selectedItem = items.find(i => i.id === selectedId);
+  const selectedItem = itemsState?.find(i => i.id === selectedId);
 
   function addToOrder() {
     if (!selectedItem) return;
@@ -89,17 +90,18 @@ function showSnackbar(
     setError("");
 
     setOrder(prev => {
-      const exists = prev.find(i => i.id === selectedItem.id);
+      const exists = prev?.find(i => i.id === selectedItem.id);
       if (exists) {
-        return prev.map(i =>
+        return prev?.map(i =>
           i.id === selectedItem.id
             ? { ...i, requestedQty: i.requestedQty + quantity }
-            : i
+            : i 
+
         );
       }
 
       return [
-        ...prev,
+        ...(prev || []),
         {
           id: selectedItem.id,
           name: selectedItem.name,
@@ -110,19 +112,29 @@ function showSnackbar(
     });
     showSnackbar("✅ Item added to order successfully", "success");
 
-    setQuantity(1);
+    setQuantity(0);
     setSelectedId("");
   }
 
-  async function confirmOrder() {
-    setLoading(true);
-
-    for (const item of order) {
-      if (item.requestedQty > item.availableQty) {
+  async function confirmOrder( e: React.FormEvent) {
+    e.preventDefault();
+    try{
+      setLoading(true);
+       for (const item of order || []) {
+      if (item.requestedQty > item.availableQty && orderType === 'out') {
         setError("Quantity not Enough for item: " + item.name);
         setLoading(false);
         return;
-      }
+      } 
+      updateItem(item.id, {
+        name :itemsState.find(i => i.id === item.id)?.name || item.name,
+        quantity: orderType === "in" ? Number(item.availableQty + item.requestedQty) : Number(item.availableQty - item.requestedQty),
+        category : itemsState.find(i => i.id === item.id)?.category || "Unknown",
+        location : itemsState.find(i => i.id === item.id)?.location || "Unknown",
+        minQuantity : itemsState.find(i => i.id === item.id)?.minQuantity || 0,
+        price : itemsState.find(i => i.id === item.id)?.price || 0,
+      
+      });
       addEvent({ type: 'confirmOrder', message : `${orderType} order confirmed for item ${item.name} with quantity ${item.requestedQty}` })
       showSnackbar("📦 Order confirmed and quantities deducted", "success");
 
@@ -130,17 +142,23 @@ function showSnackbar(
 
   
     // تحديث الواجهة
-    setItems(prev =>
-      prev.map(i => {
-        const ordered = order.find(o => o.id === i.id);
+    setItemsState(prev =>
+      prev?.map(i => {
+        const ordered = order?.find(o => o.id === i.id);
         return ordered
-          ? { ...i, quantity: orderType === 'in' ? i.quantity + ordered.requestedQty : i.quantity - ordered.requestedQty  }
+          ? { ...i, quantity: orderType === "in" ? Number(i.quantity + ordered.requestedQty) : Number(i.quantity - ordered.requestedQty)  }
           : i;
       })
     );
 
     setOrder([]);
     setLoading(false);
+
+    }
+    catch{
+      
+    }
+   
   }
 return (
   <Card sx={{ maxWidth: 520, mx: "auto", mt: 5  , backgroundColor: "background.paper", borderRadius: 3 }}>
@@ -178,7 +196,7 @@ return (
         onChange={e => setSelectedId(e.target.value)}
         margin="normal"
       >
-        {items.map(item => (
+        {itemsState?.map(item => (
           <MenuItem key={item.id} value={item.id}>
             {item.name} (Available: {item.quantity})
           </MenuItem>
@@ -191,7 +209,7 @@ return (
         fullWidth
         label="Quantity"
         value={quantity}
-        inputProps={{ min: 1 }}
+
         onChange={e => setQuantity(+e.target.value)}
         margin="normal"
       />
@@ -224,13 +242,13 @@ return (
             📦 Order Items
           </Typography>
 
-          {order.length === 0 ? (
+          {order?.length === 0 ? (
             <Typography color="text.secondary">
               No items added
             </Typography>
           ) : (
             <List>
-              {order.map(item => (
+              {order?.map(item => (
                 <ListItem
                   key={item.id}
                   secondaryAction={
@@ -262,7 +280,7 @@ return (
         fullWidth
         variant="contained"
         color="success"
-        disabled={order.length === 0 || loading}
+        disabled={order?.length === 0 || loading}
         onClick={confirmOrder}
       >
         {loading ? "Processing..." : "Confirm Order"}

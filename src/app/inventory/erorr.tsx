@@ -3,7 +3,7 @@
 import { Button, Typography } from "@mui/material";
 
 export default function ErrorPage({
-  error,
+ 
   reset,
 }: {
   error: Error;

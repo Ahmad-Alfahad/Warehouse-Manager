@@ -1,14 +1,14 @@
-"use client";
 
-import { Container, Typography, Paper } from "@mui/material";
+import { Container } from "@mui/material";
 import OrderForm from "@/component/orders/OrderForm";
-
-export default function NewOrderPage() {
+import {getItems} from "@/lib/service/api";
+export default async  function NewOrderPage() {
+  //  const items = await getItems();
   return (
     
     <Container maxWidth="md">
       
-      
+        
         <OrderForm />
       
     </Container>
